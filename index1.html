@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dnyaneshwar Satish Patil | Electronics Engineer & AI Enthusiast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --royal-blue: #4169E1;
+            --deep-violet: #4B0082;
+            --teal: #008080;
+            --gold: #FFD700;
+            --neon-pink: #FF00FF;
+            --neon-cyan: #00FFFF;
+            --bg-dark: #0a0a1a;
+            --bg-glass: rgba(10, 10, 26, 0.5);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px; 
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease-out, opacity 0.2s;
+            color: var(--neon-cyan);
+            font-size: 30px;
+            line-height: 1;
+            text-align: center;
+        }
+
+        a:hover ~ .custom-cursor, button:hover ~ .custom-cursor {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+
+        h1, h2, h3, .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 70% 30%, rgba(65, 105, 225, 0.2), transparent 80%),
+                        radial-gradient(ellipse at 30% 70%, rgba(75, 0, 130, 0.2), transparent 80%);
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #E0E0E0, #9370DB, #00FFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .glow-border {
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--neon-cyan), transparent 30%);
+            animation: rotate 4s linear infinite;
+            transform-origin: 0% 0%;
+        }
+        .glow-border > * {
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .glow-shadow {
+             box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), 0 0 30px rgba(75, 0, 130, 0.2);
+        }
+
+        .radial-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .radial-progress-text {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .wave-divider {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        .wave-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 150px;
+        }
+        .wave-divider .shape-fill {
+            fill: var(--bg-dark);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100">
+
+    <div class="custom-cursor">&#10022;</div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glassmorphism">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-orbitron font-bold gradient-text">DSP</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+                <a href="#journey" class="hover:text-cyan-400 transition-colors">Journey</a>
+                <a href="#skills" class="hover:text-cyan-400 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
+                <a href="https://drive.google.com/file/d/1bqRn3KGN1I1J2q7LYRcZ5vrU8N2c9BgN/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">Resume</a>
+                <a href="#contact" class="px-4 py-2 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 shadow-lg shadow-cyan-500/30">Contact Me</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-black/50 backdrop-blur-lg">
+            <a href="#about" class="block py-2 px-6 hover:bg-cyan-900">About</a>
+            <a href="#journey" class="block py-2 px-6 hover:bg-cyan-900">Journey</a>
+            <a href="#skills" class="block py-2 px-6 hover:bg-cyan-900">Skills</a>
+            <a href="#projects" class="block py-2 px-6 hover:bg-cyan-900">Projects</a>
+            <a href="https://drive.google.com/file/d/1bqRn3KGN1I1J2q7LYRcZ5vrU8N2c9BgN/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="block py-2 px-6 hover:bg-cyan-900">Resume</a>
+            <a href="#contact" class="block py-2 px-6 hover:bg-cyan-900">Contact Me</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-24">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col md:flex-row items-center justify-center text-center md:text-left relative">
+            <div class="md:w-3/5 space-y-4 z-10">
+                <h1 class="text-4xl md:text-5xl font-orbitron font-extrabold uppercase tracking-wider">
+                    Dnyaneshwar <span class="gradient-text">Patil</span>
+                </h1>
+                <h2 class="text-xl md:text-2xl lg:text-3xl font-light text-cyan-300 tracking-widest">
+                    Electronics Engineer | AI Enthusiast | Innovation Leader
+                </h2>
+                <p class="text-gray-300 max-w-xl mx-auto md:mx-0">
+                    Driving innovation at the intersection of hardware and artificial intelligence. Passionate about creating intelligent systems that solve real-world problems.
+                </p>
+                <div class="pt-6 flex items-center justify-center md:justify-start space-x-4">
+                    <a href="#projects" class="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/40">View My Work</a>
+                </div>
+            </div>
+            <div class="md:w-2/5 mt-10 md:mt-0 z-10 flex justify-center">
+                <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 glow-border rounded-full p-1">
+                    <div class="bg-slate-900 rounded-full w-full h-full p-2">
+                        <img src="dnyan_pp_pic(1).jpg" alt="Dnyaneshwar Satish Patil" class="rounded-full w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me -->
+        <section id="about" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-orbitron font-bold">About <span class="gradient-text">Me</span></h2>
+                <p class="text-gray-400 mt-2">A Glimpse into My Vision and Goals</p>
+            </div>
+            <div class="glassmorphism rounded-3xl p-8 md:p-12 max-w-4xl mx-auto glow-shadow text-center">
+                <p class="text-lg md:text-xl leading-relaxed">
+                    As an engineer at the nexus of hardware and AI, I'm passionate about architecting intelligent systems that tackle tangible challenges. My focus is on pioneering cutting-edge solutions that advance technology and deliver meaningful societal impact. I embrace a philosophy of continuous learning and growth, always eager for the next challenge.
+                </p>
+            </div>
+        </section>
+
+        <!-- Journey -->
+        <section id="journey" class="py-20">
+             <div class="text-center mb-16">
+                <h2 class="text-4xl font-orbitron font-bold">My <span class="gradient-text">Journey</span></h2>
+                <p class="text-gray-400 mt-2">Education & Leadership Experience</p>
+            </div>
+            <div class="relative max-w-5xl mx-auto">
+                <!-- Vertical Line -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-cyan-500 via-purple-500 to-transparent"></div>
+                
+                <!-- Education -->
+                <div class="mb-16">
+                    <div class="flex justify-center items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center ring-4 ring-cyan-500/30 z-10">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 6 0 0 0 12 0v-3.5"/></svg>
+                        </div>
+                    </div>
+                     <div class="grid md:grid-cols-2 gap-8">
+                        <!-- B.E. -->
+                        <div class="timeline-item">
+                            <div class="glassmorphism p-6 rounded-xl glow-shadow text-right">
+                                <p class="text-cyan-400 font-semibold">Sep 2022 - Sep 2026</p>
+                                <h3 class="text-xl font-bold font-orbitron mt-1">Bachelor of Engineering, E&C</h3>
+                                <p class="text-gray-300">Visvesvaraya Technological University (VTU)</p>
+                                <p class="text-sm text-gray-400">CGPA: 7.97/10.0</p>
+                            </div>
+                        </div>
+                        <div></div>
+                        <!-- XII -->
+                        <div></div>
+                         <div class="timeline-item">
+                            <div class="glassmorphism p-6 rounded-xl glow-shadow text-left">
+                                <p class="text-cyan-400 font-semibold">2020 - 2022</p>
+                                <h3 class="text-xl font-bold font-orbitron mt-1">Higher Secondary School (XII)</h3>
+                                <p class="text-gray-300">Sankalp PU College, Basavakalyan</p>
+                                <p class="text-sm text-gray-400">Percentage: 75.66%</p>
+                            </div>
+                        </div>
+                         <!-- X -->
+                        <div class="timeline-item">
+                           <div class="glassmorphism p-6 rounded-xl glow-shadow text-right">
+                               <p class="text-cyan-400 font-semibold">2007 - 2020</p>
+                               <h3 class="text-xl font-bold font-orbitron mt-1">Secondary School (X)</h3>
+                               <p class="text-gray-300">Shree Basaveshwara Higher-Primary School</p>
+                               <p class="text-sm text-gray-400">Percentage: 89.28%</p>
+                           </div>
+                       </div>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div>
+                     <div class="flex justify-center items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center ring-4 ring-purple-500/30 z-10">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div></div>
+                        <!-- IEEE Secretary -->
+                         <div class="timeline-item">
+                            <div class="glassmorphism p-6 rounded-xl glow-shadow text-left">
+                                <p class="text-purple-400 font-semibold">Nov 2024 - Present</p>
+                                <h3 class="text-xl font-bold font-orbitron mt-1">Secretary, IEEE Student Branch</h3>
+                                <p class="text-gray-300">IEEE Student Branch TOCE</p>
+                                <p class="text-sm text-gray-400 mt-2">Spearheaded technical events, boosting attendance by 30%.</p>
+                            </div>
+                        </div>
+                        <!-- E-Cell Head -->
+                        <div class="timeline-item">
+                           <div class="glassmorphism p-6 rounded-xl glow-shadow text-right">
+                               <p class="text-purple-400 font-semibold">Aug 2024 - Jan 2025</p>
+                               <h3 class="text-xl font-bold font-orbitron mt-1">Innovation & Research Head</h3>
+                               <p class="text-gray-300">E-Cell TOCE</p>
+                               <p class="text-sm text-gray-400 mt-2">Led teams for startup validation and mentored NEC '24 participants.</p>
+                           </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-orbitron font-bold">Technical <span class="gradient-text">Arsenal</span></h2>
+                <p class="text-gray-400 mt-2">My Core Competencies</p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
+                <!-- Skills will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects" class="py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-orbitron font-bold">Innovations & <span class="gradient-text">Projects</span></h2>
+                <p class="text-gray-400 mt-2">Where Ideas Become Reality</p>
+            </div>
+            <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project cards will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section id="certifications" class="py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-orbitron font-bold">Achievements & <span class="gradient-text">Certifications</span></h2>
+                <p class="text-gray-400 mt-2">Validating My Expertise</p>
+            </div>
+            <div id="certifications-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <!-- Certifications will be populated by JS -->
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Contact & Footer -->
+    <footer id="contact" class="relative pt-32 pb-12">
+        <div class="wave-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        <div class="container mx-auto px-6 text-center z-10 relative">
+            <h2 class="text-4xl font-orbitron font-bold">Get In <span class="gradient-text">Touch</span></h2>
+            <p class="text-gray-400 mt-2 mb-8">Have a project in mind or just want to connect? Feel free to reach out.</p>
+            <form id="contact-form" class="max-w-xl mx-auto space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <input type="text" name="from_name" placeholder="Your Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300" required>
+                    <input type="email" name="from_email" placeholder="Your Email" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300" required>
+                </div>
+                 <textarea name="message" placeholder="Your Message" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300" required></textarea>
+                 <button type="submit" class="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/40 w-full md:w-auto">Send Message</button>
+            </form>
+            <p id="form-status" class="mt-4 h-6"></p>
+            <div class="flex justify-center space-x-6 mt-12 mb-8">
+                <a href="mailto:dnyaneshwarece2026@gmail.com" class="p-3 rounded-full glassmorphism hover:text-cyan-400 hover:scale-110 transition-all duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+                <a href="https://www.linkedin.com/in/dnyanpatil/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-full glassmorphism hover:text-cyan-400 hover:scale-110 transition-all duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a>
+            </div>
+            <p class="text-gray-500">&copy; 2025 Dnyaneshwar Satish Patil. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Custom cursor
+            const cursor = document.querySelector('.custom-cursor');
+            window.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // EmailJS Integration
+            (function() {
+                // IMPORTANT: Go to emailjs.com, create an account, and get your Public Key.
+                emailjs.init({ 
+                    publicKey: "aEFMG-irivihlDLNE",
+                });
+            })();
+
+            const contactForm = document.getElementById('contact-form');
+            const formStatus = document.getElementById('form-status');
+
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                formStatus.textContent = 'Sending...';
+                
+                // IMPORTANT: These IDs are from your EmailJS account.
+                // 1. SERVICE ID: Find this in the "Email Services" tab.
+                // 2. TEMPLATE ID: Find this in the "Email Templates" tab.
+                //    - You need to create a template on the EmailJS website. 
+                //    - Paste the HTML template code you provided earlier into that EmailJS template.
+                emailjs.sendForm('service_z7wh1ko', 'template_k36yt3h', this)
+                    .then(() => {
+                        formStatus.textContent = 'Message sent successfully!';
+                        formStatus.style.color = 'var(--neon-cyan)';
+                        contactForm.reset();
+                        setTimeout(() => formStatus.textContent = '', 5000);
+                    }, (error) => {
+                        formStatus.textContent = 'Failed to send. Please try again.';
+                        formStatus.style.color = '#ff4d4d';
+                        console.log('FAILED...', error);
+                    });
+            });
+
+            // Mobile Menu
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('bg-slate-900/80', 'shadow-lg');
+                } else {
+                    header.classList.remove('bg-slate-900/80', 'shadow-lg');
+                }
+            });
+
+            // Three.js Particle Background
+            let scene, camera, renderer, particles;
+            function initThree() {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                const particleCount = 5000;
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const geometry = new THREE.BufferGeometry();
+                const material = new THREE.PointsMaterial({
+                    size: 0.015,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false
+                });
+                
+                const color1 = new THREE.Color('#00FFFF'); // Cyan
+                const color2 = new THREE.Color('#9370DB'); // MediumPurple
+                const color3 = new THREE.Color('#4169E1'); // Royal Blue
+                const colorPalette = [color1, color2, color3];
+
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = (Math.random() - 0.5) * 15;
+                    positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
+                    positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+                    
+                    const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                    colors[i * 3] = color.r;
+                    colors[i * 3 + 1] = color.g;
+                    colors[i * 3 + 2] = color.b;
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+                camera.position.z = 5;
+
+                window.addEventListener('resize', onWindowResize, false);
+                document.addEventListener('mousemove', onMouseMove, false);
+            }
+
+            let mouseX = 0, mouseY = 0;
+            function onMouseMove(event) {
+                mouseX = (event.clientX - window.innerWidth / 2) / 1000;
+                mouseY = (event.clientY - window.innerHeight / 2) / 1000;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = Date.now() * 0.00005;
+                if(particles) particles.rotation.y = time * 0.2;
+                
+                camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.02;
+                camera.position.y += (-mouseY * 0.2 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            initThree();
+            animate();
+
+            // GSAP Animations
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.from("#hero > div", {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const elems = section.querySelectorAll("h2, p, div[class*='grid'], div[class*='timeline-item'], div[class*='glassmorphism']");
+                gsap.from(elems, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        end: "bottom 60%",
+                        toggleActions: "play none none none",
+                    },
+                    opacity: 0,
+                    y: 40,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out'
+                });
+            });
+
+
+            // Skills Data and Generation
+            const skills = [
+                { name: 'Python', percentage: 85, color: '#4169E1' },
+                { name: 'AI / ML', percentage: 60, color: '#00FFFF' },
+                { name: 'IoT Development', percentage: 88, color: '#4B0082' },
+                { name: 'Embedded Systems', percentage: 82, color: '#FF00FF' },
+                { name: 'Microcontrollers', percentage: 85, color: '#FFD700' },
+                { name: 'SQL', percentage: 75, color: '#008080' },
+                { name: 'Cloud Fundamentals', percentage: 70, color: '#4169E1' },
+                { name: 'VLSI & EDA Tools', percentage: 95, color: '#00FFFF' },
+                { name: 'Project Management', percentage: 92, color: '#4B0082' },
+                { name: 'Team Leadership', percentage: 95, color: '#FF00FF' }
+            ];
+
+            const skillsContainer = document.querySelector('#skills .grid');
+            skills.forEach(skill => {
+                const skillEl = document.createElement('div');
+                skillEl.className = 'flex flex-col items-center text-center';
+                skillEl.innerHTML = `
+                    <div class="radial-progress" style="background: conic-gradient(${skill.color} 0deg, #1f2937 0deg);">
+                        <div class="absolute w-[100px] h-[100px] bg-slate-900 rounded-full flex items-center justify-center">
+                            <span class="radial-progress-text text-xl font-bold font-orbitron">0%</span>
+                        </div>
+                    </div>
+                    <h3 class="mt-4 font-semibold text-lg">${skill.name}</h3>
+                `;
+                skillsContainer.appendChild(skillEl);
+
+                gsap.to(skillEl.querySelector('.radial-progress'), {
+                    scrollTrigger: {
+                        trigger: skillEl,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none',
+                    },
+                    duration: 1.5,
+                    ease: 'power2.out',
+                    onUpdate: function() {
+                        const progress = this.progress();
+                        const angle = progress * skill.percentage * 3.6;
+                        skillEl.querySelector('.radial-progress').style.background = `conic-gradient(${skill.color} ${angle}deg, #1f2937 ${angle}deg)`;
+                        skillEl.querySelector('.radial-progress-text').textContent = `${Math.round(progress * skill.percentage)}%`;
+                    }
+                });
+            });
+
+            // Projects Data and Generation
+            const projects = [
+                {
+                    title: 'AI-Powered Smart Pill Dispenser',
+                    description: 'A comprehensive IoT-based healthcare solution addressing medication non-adherence and automated dispensing mechanisms.',
+                    tags: ['Python', 'IoT', 'ESP32', 'Healthcare'],
+                    image: 'https://placehold.co/600x400/0a0a1a/00ffff?text=Smart+Dispenser',
+                    link: '#'
+                },
+                {
+                    title: 'EEG-Based Thought-Controlled Device',
+                    description: 'An advanced brain-computer interface utilizing sophisticated signal processing and neural network architectures for real-time thought recognition.',
+                    tags: ['Signal Processing', 'Neural Networks', 'BCI'],
+                    image: 'https://placehold.co/600x400/0a0a1a/ff00ff?text=EEG+Device',
+                    link: '#'
+                },
+                {
+                    title: 'Smart Helmet Safety System',
+                    description: 'Developed for CREAT-A-THON 6.0 IEEE PES Hackathon, this system integrates a breathalyzer, voice detection, and emergency SOS features.',
+                    tags: ['ESP32', 'IoT', 'Safety', 'Hackathon'],
+                    image: 'https://placehold.co/600x400/0a0a1a/ffd700?text=Smart+Helmet',
+                    link: '#'
+                }
+            ];
+
+            const projectsGrid = document.getElementById('projects-grid');
+            projects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'group relative overflow-hidden rounded-xl glassmorphism p-1 glow-shadow transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/50';
+                
+                let tagsHTML = '';
+                project.tags.forEach(tag => {
+                    tagsHTML += `<span class="bg-cyan-900/50 text-cyan-300 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">${tag}</span>`;
+                });
+
+                projectCard.innerHTML = `
+                    <a href="${project.link}" target="_blank" rel="noopener noreferrer">
+                        <div class="relative">
+                            <img src="${project.image}" alt="${project.title}" class="rounded-lg w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-4 w-full">
+                               <h3 class="text-xl font-bold font-orbitron text-white">${project.title}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <p class="text-gray-400 text-sm">${project.description}</p>
+                            <div class="flex flex-wrap gap-2">${tagsHTML}</div>
+                        </div>
+                    </a>
+                `;
+                projectsGrid.appendChild(projectCard);
+            });
+            
+            // Certifications Data and Generation
+            const certifications = [
+                { title: "NEC '24 Basic Track", issuer: "E-Cell, IIT Bombay", year: "2024-2026", icon: 'award' },
+                { title: "Programming for Everybody (Python)", issuer: "University of Michigan", year: "2024", icon: 'code' },
+                { title: "Generative AI: Intro & Applications", issuer: "IBM", year: "2024", icon: 'brain-circuit' },
+                { title: "Introduction to Artificial Intelligence (AI)", issuer: "IBM SkillsBuild", year: "2024", icon: 'cpu' },
+                { title: "Introduction to SQL & Cloud Computing", issuer: "In Progress", year: "2025", icon: 'database' },
+            ];
+            
+            const certGrid = document.getElementById('certifications-grid');
+            certGrid.innerHTML = certifications.map(cert => `
+                <div class="glassmorphism rounded-xl p-6 flex items-center space-x-4 glow-shadow transition-all duration-300 hover:bg-cyan-900/30">
+                    <div class="p-3 bg-gradient-to-br from-cyan-600 to-purple-600 rounded-full">
+                        <i data-lucide="${cert.icon}" class="text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white">${cert.title}</h3>
+                        <p class="text-sm text-gray-400">${cert.issuer}</p>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        });
+
+    </script>
+</body>
+</html>
+
